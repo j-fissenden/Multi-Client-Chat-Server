@@ -22,4 +22,10 @@ class ChatClient:
         except Exception as e:
             print(f"Error decrypting message: {e}")
             return "Error: Unable to decrypt message"
+        
+    def send_message(self, event = None):
+        pass
+
+    def receive_messages(self):
+        pass
             
