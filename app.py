@@ -1,10 +1,10 @@
 from ChatServer import ChatServer
 from ChatClient import ChatClient
-from cryptography.fernet import Fernet
 import sys
+from Crypto.Random import get_random_bytes
 
 def generate_aes_key():
-    return Fernet.generate_key()
+    return get_random_bytes(32)
 
 if __name__ == "__main__":
     try:
