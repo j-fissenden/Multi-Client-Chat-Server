@@ -18,10 +18,20 @@ class ChatServer:
         
         try:
             self.server_socket = ssl.wrap_socket(self.server_socket, certfile = 'server.crt', keyfile = 'server.key', server_side = True)
-            
+
         except ssl.SSLError as e:
             print(f"SSL/TLS error: {e}")
             exit(1)
 
         self.cipher = Fernet(aes_key)
 
+    def broadcast(self, message, sender = None):
+        encrypted_msg = self.cipher.encrypt(message.encode())
+        for user, client in self.clients.items():
+            try:
+                if user != sender:
+                    client.send(encrypted_msg)
+            except Exception as e:
+                print(f"Error sending message to {user}: {e}")
+                client.close()
+                del self.clients[user]
