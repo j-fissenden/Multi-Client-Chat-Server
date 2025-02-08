@@ -23,6 +23,26 @@ class ChatClient:
             messagebox.showerror("Connection Error", f"Socket connection error: {e}")
             exit(1)
         
+        self.cipher = Fernet(aes_key)
+        self.username = self.decrypt_msg(self.client_socket.recv(1024))
+        self.username = input(self.username)
+        self.client_socket.send(self.encrypt_msg(self.username))
+
+        self.root = tk.Tk()
+        self.root.title("Chat Client")
+        self.root.geometry("400x500")
+
+        self.chat_display = scrolledtext.ScrolledText(self.rootm wrap = tk.WORD)
+        self.chat_display.pack(padx = 10, pady = 10, expand = True, fill = tk.BOTH)
+        self.chat_display.config(state = tk.DISABLED)
+
+        self.entry_message = tk.Entry(self.root)
+        self.entry_message.pack(padx = 10, pady = 5, fill = tk.X)
+        self.entry_message.bind("<Return>", self.send_message)
+
+        self.send_button = tk.Button(self.root, text = "Send", command = self.send_message)
+        self.send_button.pack(pady = 5)
+        
 
     def encrypt_msg(self, msg):
         return self.cipher.encrypt(msg.encoded())
