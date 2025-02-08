@@ -12,7 +12,7 @@ class ChatClient:
             context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
             context.check_hostname = False
             context.verify_mode = ssl.CERT_NONE
-            self.client_socket = context.wrap_socket(self.client_socket, server_hostname=host)
+            self.client_socket = context.wrap_socket(self.client_socket, server_hostname = host)
             self.client_socket.connect((host, port))
 
         except Exception as e:
@@ -23,7 +23,7 @@ class ChatClient:
         self.root.title("Chat Client")
         self.root.geometry("400x500")
 
-        self.chat_display = scrolledtext.ScrolledText(self.root, state='disabled')
+        self.chat_display = scrolledtext.ScrolledText(self.root, state ='disabled')
         self.chat_display.pack(expand = True, fill = 'both', padx = 10, pady = 5)
 
         self.entry_message = tk.Entry(self.root)
@@ -31,7 +31,7 @@ class ChatClient:
         self.entry_message.bind('<Return>', self.send_message)
 
         self.send_button = tk.Button(self.root, text = 'Send', command = self.send_message)
-        self.send_button.pack(pady=5)
+        self.send_button.pack(pady = 5)
 
         threading.Thread(target = self.receive_messages, daemon = True).start()
         self.root.mainloop()
