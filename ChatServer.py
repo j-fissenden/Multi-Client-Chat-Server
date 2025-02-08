@@ -14,7 +14,7 @@ class ChatServer:
             context = ssl.create_default_context(ssl.Purpose.CLIENT_AUTH)
             context.load_cert_chain(certfile = 'server.crt', keyfile = 'server.key')
             context.verify_mode = ssl.CERT_NONE
-            self.server_socket = context.wrap_socket(self.server_socket, server_side=True)
+            self.server_socket = context.wrap_socket(self.server_socket, server_side = True)
 
         except Exception as e:
             print(f"SSL error: {e}")
@@ -79,4 +79,4 @@ class ChatServer:
     def start(self):
         while True:
             client, addr = self.server_socket.accept()
-            threading.Thread(target=self.handle_client, args=(client, addr), daemon=True).start()
+            threading.Thread(target = self.handle_client, args=(client, addr), daemon = True).start()
