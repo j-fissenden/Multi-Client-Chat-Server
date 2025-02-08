@@ -35,3 +35,50 @@ class ChatServer:
                 print(f"Error sending message to {user}: {e}")
                 client.close()
                 del self.clients[user]
+
+    def handle_client(self, conn, addr):
+        try:
+            conn.send(self.cipher.encrypt("Enter your username: ".encode()))
+            username = self.cipher.decrypt(conn.recv(1024)).decode()
+            self.clients[username] = conn
+            print(f"{username} joined from {addr}")
+            self.broadcast(f"{username} has joined the chat.")
+
+        except Exception as e:
+            print(f"Error handling new client {addr}: {e}")
+            conn.close()
+
+            return
+
+        while True:
+            try:
+                message = self.cipher.decrypt(conn.recv(1024)).decode()
+                if not message:
+                    break
+
+                if message.startswith('@'):
+                    target, msg = message.split(' ', 1)
+                    target = target[1:]
+
+                    if target in self.clients:
+                        self.clients[target].send(self.cipher.encrypt(f"(PM) from {username}: {msg}".encode()))
+                    
+                    else:
+                        conn.send(self.cipher.encrypt("User not found.".encode()))
+
+                else:
+                    self.broadcast(f"{username}: {message}", sender = username)
+            
+            except Exception as e:
+                print(f"Error handling message from {username}: {e}")
+                break
+
+            try:
+                conn.close()
+
+            except Exception as e:
+                print(f"Error closing connection with {username}: {e}")
+            
+            finally:
+                del self.clients[username]
+                self.broadcast(f"{username} has left the chat.")
