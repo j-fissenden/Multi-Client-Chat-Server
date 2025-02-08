@@ -9,7 +9,7 @@
 .vscode/
 .idea/
 
-# Ignore environments
+# Ignore environmental vars
 venv/
 *.env
 
