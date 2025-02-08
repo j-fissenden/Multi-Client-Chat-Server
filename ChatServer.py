@@ -82,3 +82,14 @@ class ChatServer:
             finally:
                 del self.clients[username]
                 self.broadcast(f"{username} has left the chat.")
+
+    def start(self):
+        while True:
+            try:
+                client, addr = self.server_socket.accept()
+                client_thread = threading.Thread(target = self.handle_client, args = (client, addr))
+                client_thread.start()
+            
+            except Exception as e:
+                print(f"Error accepting new client: {e}")
+                continue
