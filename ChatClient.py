@@ -21,5 +21,5 @@ class ChatClient:
         
         except Exception as e:
             print(f"Error decrypting message: {e}")
-            return "Erro: Unable to decrypt message"
+            return "Error: Unable to decrypt message"
             
