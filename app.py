@@ -16,7 +16,6 @@ if __name__ == "__main__":
             try:
                 server = ChatServer(aes_key)
                 server.start()
-                
             except Exception as e:
                 print(f"Error starting the server: {e}")
                 sys.exit(1)
