@@ -1,4 +1,5 @@
 import socket
+import threading
 import ssl
 import tkinter as tk
 from tkinter import scrolledtext, messagebox
@@ -42,7 +43,10 @@ class ChatClient:
 
         self.send_button = tk.Button(self.root, text = "Send", command = self.send_message)
         self.send_button.pack(pady = 5)
-        
+
+        threading.Thread(target = self.receive_messages, daemon = True).start()
+        self.gui_running = True
+        self.root.mainloop()
 
     def encrypt_msg(self, msg):
         return self.cipher.encrypt(msg.encoded())
